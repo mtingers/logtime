@@ -116,6 +116,10 @@ void insert_time(long long datetime)
         //printf("first: %llu\n", datetime);
         ltmp = lt_new(datetime);
         ltimes = malloc(sizeof(*ltimes));
+        if(!ltimes) {
+            perror("malloc");
+            exit(1);
+        }
         ltimes[0] = ltmp;
         ltimes_len++;
         return;
@@ -260,7 +264,12 @@ void parse_log(const char *log_path)
     char year_buf[3];
     int counter = 0, rc;
     char *sp1, *token = NULL;
+    
+    if(!b) {
+        perror("malloc failed to allocated 1MiB line buffer");
+        exit(1);
 
+    }
     if(log_path) {
         f = fopen(log_path, "r");
         if(!f) {
@@ -269,12 +278,6 @@ void parse_log(const char *log_path)
         }
     } else {
         f = stdin;
-    }
-    if(!b) {
-        perror("malloc failed to allocated 1MiB line buffer");
-        fclose(f);
-        exit(1);
-
     }
 
     /* Compile some common time formats to look for
