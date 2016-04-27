@@ -51,7 +51,7 @@ def usage():
     print ""
     print "Example:"
     print " Apache logs grouped by hour"
-    print "     cat /var/log/apache2/access.log | ", sys.argv[0], "H '\[(?P<time>.+?) ' '%d/%b/%Y:%H:%M:%S'"
+    print "     cat /var/log/apache2/access.log | ", sys.argv[0], "H '\[(.+?) ' '%d/%b/%Y:%H:%M:%S'"
     print ""
     print "Grouping spec:"
     print "     H - hour"
@@ -101,13 +101,24 @@ def main():
     except:
         usage()
 
-    pc = re.compile(pattern)
+    try:
+        pc = re.compile(pattern)
+    except:
+        print 'ERROR: Unable to compile regex pattern'
+        sys.exit(1)
+
     for line in sys.stdin:
         matches = pc.findall(line)
         if not matches: continue
-        tstruct = time.strptime(matches[0], timespec)
-        tstring = time.strftime("%Y%m%d%H%M%S", tstruct)
-        
+        try:
+            tstruct = time.strptime(matches[0], timespec)
+            tstring = time.strftime("%Y%m%d%H%M%S", tstruct)
+        except:
+            print "Failed to convert match using timespec"
+            print "Match is:", matches
+            print "Timespec is:", timespec
+            sys.exit(1)
+
         if period == 'H':
             tstring = tstring[:10]
         elif period == 'M':

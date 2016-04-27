@@ -13,7 +13,7 @@ Usage
 
     Example:
      Apache logs grouped by hour
-         cat /var/log/apache2/access.log |  ./logtime.py H '\[(?P<time>.+?) ' '%d/%b/%Y:%H:%M:%S'
+         cat /var/log/apache2/access.log |  ./logtime.py H '\[(.+?) ' '%d/%b/%Y:%H:%M:%S'
 
     Grouping spec:
          H - hour
