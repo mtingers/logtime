@@ -1,6 +1,12 @@
 #!/usr/bin/python
 
+
 import re, time, sys
+
+if sys.version_info < (2,7,0):
+    print 'Python version 2.7+ is required for collections Counter support'
+    sys.exit(1)
+
 from collections import Counter
 
 def print_chart(counter):
@@ -8,7 +14,7 @@ def print_chart(counter):
     min_val = 0
     max_idx = 0
     max_val = 0
-    
+
     if not counter:
         print "No results found"
         sys.exit(1)
@@ -16,9 +22,9 @@ def print_chart(counter):
     sort_idx = sorted(counter)
     min_idx = sort_idx[0]
     min_val = counter[sort_idx[0]]
-    
+
     print ""
-    
+
     for i in sort_idx:
         c = counter[i]
         if c < min_val:
@@ -37,9 +43,9 @@ def print_chart(counter):
         print i, '*' * (1+int(stars)),
         print c
         total += c
-    
+
     print '-' * 45
-    print 'max: datetime=%s count=%s' % (max_idx, max_val) 
+    print 'max: datetime=%s count=%s' % (max_idx, max_val)
     print 'min: datetime=%s count=%s' % (min_idx, min_val)
     print "avg: %s" % (total/len(counter))
     print "total:", total
@@ -91,7 +97,7 @@ def usage():
     print "     Timepsec is Python's time module [https://docs.python.org/2/library/time.html]"
     print ""
     sys.exit(1)
- 
+
 def main():
     counter = Counter()
     try:
