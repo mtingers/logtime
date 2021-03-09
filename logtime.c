@@ -1,3 +1,5 @@
+/* old C version of logtime.py */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
